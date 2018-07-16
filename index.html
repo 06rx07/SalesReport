@@ -7,16 +7,24 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
-<body>
-    <select id="region-select">
+<body onload="action.init()">
+    <select id="region-select" onchange="action.selectRegion(event)">
         <option value="East">East</option>
         <option value="North">North</option>
         <option value="South">South</option>
     </select>
 
-    <script type="text/script" src="./js/table.js"></script>
-    <script type="text/script" src="./js/ife31data.js"></script>
-    <script type="text/script" src="./js/app.js"></script>
+    <select id="product-select" onchange="action.selectProduct(event)">
+        <option value="Phone">Phone</option>
+        <option value="Laptop">Laptop</option>
+        <option value="Smart Speaker">Smart Speaker</option>
+    </select>
+
+    <div id="table-wrapper"></div>
+
+    <script src='./js/ife31data.js'></script>
+    <script src='./js/table.js'></script>
+    <script src='./js/app.js'></script>
 </body>
 
 </html>
