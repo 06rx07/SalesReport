@@ -8,17 +8,18 @@
 </head>
 
 <body onload="action.init()">
-    <select id="region-select" onchange="action.selectRegion(event)">
-        <option value="East">East</option>
-        <option value="North">North</option>
-        <option value="South">South</option>
-    </select>
-
-    <select id="product-select" onchange="action.selectProduct(event)">
-        <option value="Phone">Phone</option>
-        <option value="Laptop">Laptop</option>
-        <option value="Smart Speaker">Smart Speaker</option>
-    </select>
+    <div id='region-select' onclick="action.selectRegion(event)">
+        <input type="checkbox" name="region-all"> Select All<br>
+        <input type="checkbox" name="region" value="East" checked> East<br>
+        <input type="checkbox" name="region" value="North"> North<br>
+        <input type="checkbox" name="region" value="South"> South<br>
+    </div>
+    <div id='product-select' onclick="action.selectProduct(event)">
+        <input type="checkbox" name="product-all"> Select All<br>
+        <input type="checkbox" name="product" value="Phone" checked> Phone<br>
+        <input type="checkbox" name="product" value="Laptop"> Laptop<br>
+        <input type="checkbox" name="product" value="Smart Speaker"> Smart Speaker<br>
+    </div>
 
     <div id="table-wrapper"></div>
 

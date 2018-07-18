@@ -2,7 +2,7 @@ const tableWrapper = document.querySelector('#table-wrapper');
 
 const processData = {
     getDataBySelect: function (region, product) {
-        return sourceData.filter((data) => data.region === region && data.product === product);
+        return sourceData.filter((data) => region.indexOf(data.region) > -1 && product.indexOf(data.product) > -1);
     }
 };
 
