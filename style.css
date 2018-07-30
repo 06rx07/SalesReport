@@ -1,3 +1,10 @@
 table {
     width: 100%;
 }
+#region-select,
+#product-select {
+    display: flex;
+}
+input {
+    margin-left: 20px;
+}
