@@ -1,4 +1,5 @@
-let sourceData = [{
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const sourceData = [{
     product: "Phone",
     region: "East",
     sale: [120, 100, 140, 160, 180, 185, 190, 210, 230, 245, 255, 270]

@@ -67,18 +67,9 @@ const getTable = {
         row.appendChild(this.getHeader(firstCol));
         const secondCol = firstCol === 'product' ? 'region': 'product';
         row.appendChild(this.getHeader(secondCol));
-        row.appendChild(this.getHeader('Jan'));
-        row.appendChild(this.getHeader('Feb'));
-        row.appendChild(this.getHeader('Mar'));
-        row.appendChild(this.getHeader('Apr'));
-        row.appendChild(this.getHeader('May'));
-        row.appendChild(this.getHeader('Jun'));
-        row.appendChild(this.getHeader('Jul'));
-        row.appendChild(this.getHeader('Aug'));
-        row.appendChild(this.getHeader('Sep'));
-        row.appendChild(this.getHeader('Oct'));
-        row.appendChild(this.getHeader('Nov'));
-        row.appendChild(this.getHeader('Dec'));
+        for(let month of months){
+            row.appendChild(this.getHeader(month));
+        }
         return row;
     },
     getHeader: function (text) {
