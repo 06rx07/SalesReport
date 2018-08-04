@@ -16,6 +16,8 @@ const init = function () {
     productAll.addEventListener('change', action.selectAll);
     const barFigure = new DOMParser().parseFromString(barChart.getBarFigure(sourceData[0].sale), 'image/svg+xml');
     barContainer.appendChild(barFigure.documentElement);
+
+    lineChart.create(sourceData[0].sale);
 };
 
 const action = {
