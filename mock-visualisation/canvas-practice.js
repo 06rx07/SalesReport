@@ -45,8 +45,8 @@ const createClock = (canvas) => {
     context.fillStyle = grd;
     context.arc(75, 75, 75, 0, 2 * Math.PI);
     context.fill();
-    context.arc(75, 75, 5, 0, 2*Math.PI);
-    
+    context.arc(75, 75, 5, 0, 2 * Math.PI);
+
     context.beginPath();
     context.lineCap = 'round';
     context.lineWidth = 1;
@@ -70,7 +70,12 @@ const createClock = (canvas) => {
 };
 
 const createCloud = (canvas) => {
-
+    const context = canvas.getContext("2d");
+    const img = new Image(650, 450);
+    img.src = './cloud.png';
+    img.onload = () => {
+        context.drawImage(img, 0, 0, 650, 450);
+    };
 };
 
 createLine(document.querySelector('canvas#line'));
