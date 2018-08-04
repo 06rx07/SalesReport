@@ -1,29 +1,86 @@
+const figure = document.querySelector('figure#bar-chart');
+const barChartConfig = {
+    width: 650,
+    height: 300,
+    xGap: 50,
+    textFillStyle: '#000000',
+    font: '14px Arial',
+    lineFillStyle: '#0082c8',
+    lineJoin: 'round',
+    lineCap: 'round',
+    lineWidth: 2,
+    leftMargin: 40,
+    bottomMargin: 40,
+    rightMargin: 20,
+    topMargin: 40,
+};
+
 const barChart = {
-    getBarFigure: function(data){
-        let figure = '<figure><figcaption>East Phone Sale</figcaption>';
-        return figure + barChart.createBarChart(data) + '</figure>';
+    initContainer: function (data) {
+        const yHeight = Math.ceil(Math.max(...data) / 20) * 20;
+        barChartConfig.height = yHeight + barChartConfig.topMargin + barChartConfig.bottomMargin;
     },
-    createBarChart: function (data) {
-        let svg = '<svg viewBox="0 0 640 340" xmlns="http://www.w3.org/2000/svg">';
-        let xAxis = '<line x1="30" y1="300" x2="650" y2="300" stroke="black" />';
-        let yAxis = '<line x1="30" y1="0" x2="30" y2="300" stroke="black" />';
+    create: function (data, title) {
+        barChart.initContainer(data);
+        figure.appendChild(barChart.createBarChart(data, title));
+    },
+    createBarChart: function (data, title) {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', '0 0 ' + barChartConfig.width + ' ' + barChartConfig.height);
+        barChart.createAxes(svg, title);
+        barChart.createBar(svg, data);
+        return svg;
+    },
+    createAxes: function (svg, title) {
+        // x-axis
+        const xAxis = document.createElementNS(svg.namespaceURI, 'line');
+        xAxis.setAttribute('x1', barChartConfig.leftMargin);
+        xAxis.setAttribute('y1', barChartConfig.height - barChartConfig.bottomMargin);
+        xAxis.setAttribute('x2', barChartConfig.width);
+        xAxis.setAttribute('y2', barChartConfig.height - barChartConfig.bottomMargin);
+        xAxis.setAttribute('class', 'axis');
+        // y-axis
+        const yAxis = document.createElementNS(svg.namespaceURI, 'line');
+        yAxis.setAttribute('x1', barChartConfig.leftMargin);
+        yAxis.setAttribute('y1', barChartConfig.topMargin);
+        yAxis.setAttribute('x2', barChartConfig.leftMargin);
+        yAxis.setAttribute('y2', barChartConfig.height - barChartConfig.bottomMargin);
+        yAxis.setAttribute('class', 'axis');
+        // x-label
+        const xLabels = document.createElementNS(svg.namespaceURI, 'g');
+        for (let i = 0; i < months.length; i++) {
+            let text = document.createElementNS(svg.namespaceURI, 'text');
+            text.setAttribute('x', barChartConfig.leftMargin + 5 + i * 50);
+            text.setAttribute('y', barChartConfig.height - barChartConfig.bottomMargin / 2);
+            text.appendChild(document.createTextNode(months[i]));
+            xLabels.appendChild(text);
+        }
+        xLabels.setAttribute('class', 'x-label');
+        // y-label
+        const yLabels = document.createElementNS(svg.namespaceURI, 'g');
+        for (let i = 0; i <= (barChartConfig.height - barChartConfig.topMargin - barChartConfig.bottomMargin) / 20; i++) {
+            let text = document.createElementNS(svg.namespaceURI, 'text');
+            text.appendChild(document.createTextNode(i * 20));
+            text.setAttribute('x', 0);
+            text.setAttribute('y', barChartConfig.height - barChartConfig.bottomMargin - i * 20);
+            yLabels.appendChild(text);
+        }
+        yLabels.setAttribute('class', 'y-label');
+        // title
+
+        svg.appendChild(xAxis);
+        svg.appendChild(yAxis);
+        svg.appendChild(xLabels);
+        svg.appendChild(yLabels);
+    },
+    createBar: function (svg, data) {
         for (let i = 0; i < data.length; i++) {
-            svg += barChart.getBar(data[i], i);
-            svg += barChart.getXLabel(i);
+            let bar = document.createElementNS(svg.namespaceURI, 'rect');
+            bar.setAttribute('x', barChartConfig.leftMargin + 5 + i * 50);
+            bar.setAttribute('y', barChartConfig.height - barChartConfig.bottomMargin - data[i]);
+            bar.setAttribute('width', 30);
+            bar.setAttribute('height', data[i]);
+            svg.appendChild(bar);
         }
-        return svg + xAxis + yAxis + barChart.getYLabel() + '</svg>';
-    },
-    getBar: function (barData, xRef) {
-        return '<rect x="' + (xRef * 50 + 40) + '" y="' + (300 - barData) + '" width="30" height="' + barData + '" class="bar" />';
-    },
-    getXLabel: function (xRef) {
-        return '<text x="' + (xRef * 50 + 40) + '" y="320">' + months[xRef] + '</text>';
-    },
-    getYLabel: function () {
-        let yLabel = '';
-        for (i = 0; i < 320 / 40; i++) {
-            yLabel += '<text x="0" y="' + (300 - 40 * i) + '">' + (i * 40) + '</text>';
-        }
-        return yLabel;
     }
 };

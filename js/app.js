@@ -2,7 +2,6 @@ const regionSelect = document.querySelectorAll('input[name="region"]');
 const productSelect = document.querySelectorAll('input[name="product"]');
 const regionAll = document.querySelector('input[name="region-all"]');
 const productAll = document.querySelector('input[name="product-all"]');
-const barContainer = document.querySelector('div#bar-chart');
 
 const init = function () {
     getTable.getTableBySelect(action.getValue(regionSelect), action.getValue(productSelect));
@@ -14,10 +13,9 @@ const init = function () {
     }
     regionAll.addEventListener('change', action.selectAll);
     productAll.addEventListener('change', action.selectAll);
-    const barFigure = new DOMParser().parseFromString(barChart.getBarFigure(sourceData[0].sale), 'image/svg+xml');
-    barContainer.appendChild(barFigure.documentElement);
 
-    lineChart.create(sourceData[0].sale);
+    barChart.create(sourceData[0].sale, 'East Phone Sale');
+    lineChart.create(sourceData[0].sale, 'East Phone Sale');
 };
 
 const action = {

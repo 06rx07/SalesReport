@@ -5,6 +5,10 @@ table {
 th {
     text-transform: capitalize;
 }
+tr:hover:not(:first-of-type) {
+    cursor: pointer;
+    background-color: rgba(0,130,200,0.5);
+}
 #region-select,
 #product-select {
     display: flex;
@@ -12,6 +16,25 @@ th {
 input {
     margin-left: 20px;
 }
-.bar {
+/* bar-chart styles */
+figure {
+    margin: 0;
+    width: 650px;
+    height: 360px;
+}
+figcaption {
+    text-align: center;
+}
+.axis {
+    stroke: #000000;
+}
+rect {
     fill: #0082c8;
+}
+text {
+    fill: #000000;
+}
+.y-label text {
+    width: 40px;
+    text-align: right;
 }

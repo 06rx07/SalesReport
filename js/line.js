@@ -1,5 +1,4 @@
 const canvas = document.querySelector('canvas#line-chart');
-
 const lineChartConfig = {
     width: 650,
     height: 300,
@@ -15,7 +14,7 @@ const lineChartConfig = {
     leftMargin: 40,
     bottomMargin: 40,
     rightMargin: 20,
-    topMargin: 20,
+    topMargin: 40,
 };
 
 const lineChart = {
@@ -35,14 +34,14 @@ const lineChart = {
         context.font = lineChartConfig.font;
         context.fillStyle = lineChartConfig.textFillStyle;
     },
-    create: function (data) {
+    create: function (data, title) {
         this.initCanvas(data);
         const context = canvas.getContext('2d');
-        lineChart.createAxes(context);
+        lineChart.createAxes(context, title);
         lineChart.createLine(context, data);
         lineChart.createPoint(context, data);
     },
-    createAxes: function (context) {
+    createAxes: function (context, title) {
         // x-axis
         context.beginPath();
         context.moveTo(40, lineChartConfig.height - lineChartConfig.bottomMargin);
@@ -51,7 +50,7 @@ const lineChart = {
         // y-axis
         context.beginPath();
         context.moveTo(lineChartConfig.leftMargin, lineChartConfig.height - lineChartConfig.bottomMargin);
-        context.lineTo(lineChartConfig.leftMargin, 0);
+        context.lineTo(lineChartConfig.leftMargin, lineChartConfig.topMargin);
         context.stroke();
         // x-label
         lineChart.initTextContext(context);
@@ -59,10 +58,13 @@ const lineChart = {
             context.fillText(months[i], 50 + i * 50, lineChartConfig.height - lineChartConfig.bottomMargin / 2);
         }
         // y-label
-        for (let i = 0; i <= (lineChartConfig.height - 60) / 20; i++) {
+        for (let i = 0; i <= (lineChartConfig.height - lineChartConfig.topMargin - lineChartConfig.bottomMargin) / 20; i++) {
             let text = (i * 20).toString();
             context.fillText(text, (lineChartConfig.leftMargin - 5) - context.measureText(text).width, lineChartConfig.height - lineChartConfig.bottomMargin - i * 20);
         }
+        // title
+        const titleWidth = context.measureText(title);
+        context.fillText(title, (lineChartConfig.width - titleWidth.width) / 2, lineChartConfig.topMargin / 2);
     },
     createLine: function (context, data) {
         lineChart.initLineContext(context);
