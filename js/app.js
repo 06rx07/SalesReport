@@ -13,9 +13,7 @@ const init = function () {
     }
     regionAll.addEventListener('change', action.selectAll);
     productAll.addEventListener('change', action.selectAll);
-
-    barChart.create(sourceData[0].sale, 'East Phone Sale');
-    lineChart.create(sourceData[0].sale, 'East Phone Sale');
+    tableWrapper.addEventListener('mouseover', action.showGraphs);
 };
 
 const action = {
@@ -74,5 +72,18 @@ const action = {
     },
     checkSelectAllProduct: function (status) {
         productAll.checked = status;
+    },
+    showGraphs: function (event) {
+        const row = event.path.find(ele => ele.localName === 'tr');
+        if (row) {
+            const sales = Array.from(row.attributes).find(attr => attr.localName === 'sales');
+            if (sales) {
+                const constraint = sales.nodeValue.split(' ');
+                const data = processData.getDataBySelect(constraint[1], constraint[0]);
+                barChart.create(data[0].sale, data[0].region + ' ' + data[0].region + ' Sale');
+                lineChart.create(data[0].sale, data[0].region + ' ' + data[0].region + ' Sale');
+            }
+        }
+        
     }
 };

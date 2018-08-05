@@ -37,6 +37,7 @@ const lineChart = {
     create: function (data, title) {
         this.initCanvas(data);
         const context = canvas.getContext('2d');
+        context.clearRect(0, 0, lineChartConfig.width, lineChartConfig.height);
         lineChart.createAxes(context, title);
         lineChart.createLine(context, data);
         lineChart.createPoint(context, data);

@@ -80,6 +80,7 @@ const getTable = {
     },
     appendRow: function (rowData, spanKey, spanRow) {
         const row = document.createElement('tr');
+        row.setAttribute('sales', rowData.product + ' ' + rowData.region);
         if (typeof spanRow !== 'undefined') {
             row.appendChild(this.getRowElement(rowData[spanKey], spanRow));
         }

@@ -17,6 +17,9 @@ const barChartConfig = {
 
 const barChart = {
     initContainer: function (data) {
+        if (figure.firstChild) {
+            figure.removeChild(figure.firstChild);
+        }
         const yHeight = Math.ceil(Math.max(...data) / 20) * 20;
         barChartConfig.height = yHeight + barChartConfig.topMargin + barChartConfig.bottomMargin;
     },
