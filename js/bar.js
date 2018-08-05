@@ -60,18 +60,25 @@ const barChart = {
         const yLabels = document.createElementNS(svg.namespaceURI, 'g');
         for (let i = 0; i <= (barChartConfig.height - barChartConfig.topMargin - barChartConfig.bottomMargin) / 20; i++) {
             let text = document.createElementNS(svg.namespaceURI, 'text');
+            let textWidth = (i * 20).toString().length * 8;
             text.appendChild(document.createTextNode(i * 20));
-            text.setAttribute('x', 0);
+            text.setAttribute('x', barChartConfig.leftMargin - 5 - textWidth);
             text.setAttribute('y', barChartConfig.height - barChartConfig.bottomMargin - i * 20);
             yLabels.appendChild(text);
         }
         yLabels.setAttribute('class', 'y-label');
         // title
+        const titleWidth = title.length * 8;
+        const caption = document.createElementNS(svg.namespaceURI, 'text');
+        caption.appendChild(document.createTextNode(title));
+        caption.setAttribute('x', (barChartConfig.width - titleWidth) / 2);
+        caption.setAttribute('y', barChartConfig.topMargin / 2);
 
         svg.appendChild(xAxis);
         svg.appendChild(yAxis);
         svg.appendChild(xLabels);
         svg.appendChild(yLabels);
+        svg.appendChild(caption);
     },
     createBar: function (svg, data) {
         for (let i = 0; i < data.length; i++) {
