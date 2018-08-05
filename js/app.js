@@ -80,10 +80,9 @@ const action = {
             if (sales) {
                 const constraint = sales.nodeValue.split(' ');
                 const data = processData.getDataBySelect(constraint[1], constraint[0]);
-                barChart.create(data[0].sale, data[0].region + ' ' + data[0].region + ' Sale');
-                lineChart.create(data[0].sale, data[0].region + ' ' + data[0].region + ' Sale');
+                barChart.create(data[0].sale, data[0].region + ' ' + data[0].product + ' Sale');
+                lineChart.create(data[0].sale, data[0].region + ' ' + data[0].product + ' Sale');
             }
         }
-        
     }
 };

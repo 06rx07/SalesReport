@@ -16,6 +16,9 @@ tr:hover:not(:first-of-type) {
 input {
     margin-left: 20px;
 }
+.charts {
+    display: flex;
+}
 /* bar-chart styles */
 figure {
     margin: 0;

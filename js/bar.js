@@ -1,14 +1,11 @@
 const figure = document.querySelector('figure#bar-chart');
 const barChartConfig = {
     width: 650,
-    height: 300,
+    height: 0,
     xGap: 50,
     textFillStyle: '#000000',
     font: '14px Arial',
     lineFillStyle: '#0082c8',
-    lineJoin: 'round',
-    lineCap: 'round',
-    lineWidth: 2,
     leftMargin: 40,
     bottomMargin: 40,
     rightMargin: 20,

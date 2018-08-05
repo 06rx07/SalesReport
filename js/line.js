@@ -1,7 +1,7 @@
 const canvas = document.querySelector('canvas#line-chart');
 const lineChartConfig = {
     width: 650,
-    height: 300,
+    height: 0,
     pointRadius: 3,
     xGap: 50,
     textFillStyle: '#000000',
