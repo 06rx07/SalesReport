@@ -1,4 +1,6 @@
 const canvas = document.querySelector('canvas#line-chart');
+const lineColors = ['#0082c8', '#f58231', '#aa6e28', '#800000', '#808000',
+    '#000080', '#e6beff', '#fabebe', '#46f0f0'];
 const lineChartConfig = {
     width: 650,
     height: 0,
@@ -18,8 +20,9 @@ const lineChartConfig = {
 };
 
 const lineChart = {
-    initCanvas: function (data) {
-        const yHeight = Math.ceil(Math.max(...data) / 20) * 20;
+    initCanvas: function (data, isMultiple) {
+        const maxHeight = (isMultiple) ? data.map(ele => Math.max(...ele)) : data;
+        const yHeight = Math.ceil(Math.max(...maxHeight) / 20) * 20;
         lineChartConfig.height = yHeight + lineChartConfig.topMargin + lineChartConfig.bottomMargin;
 
         canvas.width = lineChartConfig.width;
@@ -34,15 +37,32 @@ const lineChart = {
         context.font = lineChartConfig.font;
         context.fillStyle = lineChartConfig.textFillStyle;
     },
-    create: function (data, title) {
-        this.initCanvas(data);
+    createMultiple: function (context, data, titles) {
+        for (let i = 0; i < data.length; i++) {
+            lineChart.createLine(context, data[i], lineColors[i]);
+            lineChart.createPoint(context, data[i]);
+            // add label by color
+            context.beginPath();
+            context.strokeStyle = lineColors[i];
+            context.moveTo(lineChartConfig.leftMargin + 5, lineChartConfig.topMargin / 2 + i * 20);
+            context.lineTo(lineChartConfig.leftMargin + 45, lineChartConfig.topMargin / 2 + i * 20);
+            context.stroke();
+            context.fillText(titles[i], lineChartConfig.leftMargin + 50, lineChartConfig.topMargin / 2 + i * 20);
+        }
+    },
+    create: function (data, title, isMultiple) {
+        this.initCanvas(data, isMultiple);
         const context = canvas.getContext('2d');
         context.clearRect(0, 0, lineChartConfig.width, lineChartConfig.height);
-        lineChart.createAxes(context, title);
-        lineChart.createLine(context, data);
-        lineChart.createPoint(context, data);
+        lineChart.createAxes(context, title, isMultiple);
+        if (!isMultiple) {
+            lineChart.createLine(context, data);
+            lineChart.createPoint(context, data);
+        } else {
+            lineChart.createMultiple(context, data, title);
+        }
     },
-    createAxes: function (context, title) {
+    createAxes: function (context, title, isMultiple) {
         // x-axis
         context.beginPath();
         context.moveTo(40, lineChartConfig.height - lineChartConfig.bottomMargin);
@@ -64,15 +84,17 @@ const lineChart = {
             context.fillText(text, (lineChartConfig.leftMargin - 5) - context.measureText(text).width, lineChartConfig.height - lineChartConfig.bottomMargin - i * 20);
         }
         // title
-        const titleWidth = context.measureText(title);
-        context.fillText(title, (lineChartConfig.width - titleWidth.width) / 2, lineChartConfig.topMargin / 2);
+        if (!isMultiple) {
+            const titleWidth = context.measureText(title);
+            context.fillText(title, (lineChartConfig.width - titleWidth.width) / 2, lineChartConfig.topMargin / 2);
+        }
     },
-    createLine: function (context, data) {
+    createLine: function (context, data, lineColor) {
         lineChart.initLineContext(context);
         context.beginPath();
         for (let i = 0; i < data.length; i++) {
             let point = { x: 60 + i * 50, y: lineChartConfig.height - lineChartConfig.bottomMargin - data[i] };
-            context.strokeStyle = lineChartConfig.lineFillStyle;
+            context.strokeStyle = lineColor || lineChartConfig.lineFillStyle;
             if (i === 0) {
                 context.moveTo(point.x, point.y);
             } else {

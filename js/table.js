@@ -7,12 +7,18 @@ const processData = {
 };
 
 const getTable = {
+    displayLineChart: function (salesData) {
+        const titles = salesData.map(data => data.region + ' ' + data.product + ' Sale');
+        const sales = salesData.map(data => data.sale);
+        lineChart.create(sales, titles, true);
+    },
     getTableBySelect: function (region, product) {
         this.cleanTable();
         const salesData = processData.getDataBySelect(region, product);
         const table = this.createTable(salesData);
         if (table) {
             tableWrapper.appendChild(table);
+            this.displayLineChart(salesData);
         }
     },
     cleanTable: function () {
@@ -65,9 +71,9 @@ const getTable = {
     appendHeaders: function (firstCol) {
         const row = document.createElement('tr');
         row.appendChild(this.getHeader(firstCol));
-        const secondCol = firstCol === 'product' ? 'region': 'product';
+        const secondCol = firstCol === 'product' ? 'region' : 'product';
         row.appendChild(this.getHeader(secondCol));
-        for(let month of months){
+        for (let month of months) {
             row.appendChild(this.getHeader(month));
         }
         return row;
