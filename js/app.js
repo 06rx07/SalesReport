@@ -14,6 +14,7 @@ const init = function () {
     regionAll.addEventListener('change', action.selectAll);
     productAll.addEventListener('change', action.selectAll);
     tableWrapper.addEventListener('mouseover', action.showGraphs);
+    tableWrapper.addEventListener('mouseout', action.resetLineCharts);
 };
 
 const action = {
@@ -84,5 +85,8 @@ const action = {
                 lineChart.create(data[0].sale, data[0].region + ' ' + data[0].product + ' Sale');
             }
         }
+    },
+    resetLineCharts: function(event){
+        getTable.getTableBySelect(action.getValue(regionSelect), action.getValue(productSelect));
     }
 };
