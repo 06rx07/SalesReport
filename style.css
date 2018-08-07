@@ -1,13 +1,14 @@
 table {
     width: 100%;
     text-align: left;
+    font-size: 12px;
 }
 th {
     text-transform: capitalize;
 }
 tr:hover:not(:first-of-type) {
     cursor: pointer;
-    background-color: rgba(0,130,200,0.5);
+    /* background-color: rgba(0,130,200,0.5); */
 }
 #region-select,
 #product-select {
@@ -15,6 +16,43 @@ tr:hover:not(:first-of-type) {
 }
 input {
     margin-left: 20px;
+}
+tr input {
+    margin: 0;
+    width: 50px;
+    border: none;
+    padding: 3px;
+    outline: none;
+}
+tr .input-wrapper {
+    padding: 2px;
+}
+tr .input-wrapper:hover{
+    border: 2px solid #4D90FE;
+    padding: 0;
+}
+.input-wrapper > * {
+    display: inline;
+}
+.input-wrapper .input-edit,
+.input-wrapper .input-confirm,
+.input-wrapper .input-cancel {
+    display: none;
+}
+.input-wrapper:hover .input-edit {
+    color: #808080;
+    display: inline;
+}
+.input-wrapper:focus-within .input-confirm {
+    color: #3cb44b;
+    display: inline;
+}
+.input-wrapper:focus-within .input-cancel {
+    color: #ffe119;
+    display: inline;
+}
+.input-wrapper:focus-within .input-edit {
+    display: none;
 }
 .charts {
     display: flex;

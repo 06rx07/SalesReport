@@ -1,4 +1,5 @@
 const tableWrapper = document.querySelector('#table-wrapper');
+let tempInput = null;
 
 const processData = {
     getDataBySelect: function (region, product) {
@@ -93,17 +94,53 @@ const getTable = {
         const appendKey = (spanKey === 'product') ? 'region' : 'product';
         row.appendChild(this.getRowElement(rowData[appendKey]));
         for (let i = 0; i < rowData['sale'].length; i++) {
-            row.appendChild(this.getRowElement(rowData['sale'][i]));
+            row.appendChild(this.getRowElement(rowData['sale'][i], null, true));
         }
         return row;
     },
-    getRowElement: function (text, rowSpan) {
+    getRowElement: function (text, rowSpan, isInput) {
         const row = document.createElement('td');
-        const rowText = document.createTextNode(text);
-        row.appendChild(rowText);
-        if (typeof rowSpan !== 'undefined') {
+        const wrapper = document.createElement('div');
+        wrapper.setAttribute('class', 'input-wrapper');
+        if (isInput) {
+            const input = document.createElement('input');
+            input.value = text;
+            input.type = 'number';
+            input.readOnly = 'true';
+            input.addEventListener('click', getTable.allowEditing);
+            wrapper.appendChild(input);
+            wrapper.appendChild(getTable.getButton('far fa-edit input-edit'));
+            
+            const saveBtn = getTable.getButton('fas fa-check input-confirm');
+            saveBtn.addEventListener('click', getTable.save);
+            wrapper.appendChild(saveBtn);
+            
+            const cancelBtn = getTable.getButton('fas fa-times input-cancel');
+            cancelBtn.addEventListener('click', getTable.cancel);
+            wrapper.appendChild(cancelBtn);
+        } else {
+            const rowText = document.createTextNode(text);
+            wrapper.appendChild(rowText);
+        }
+        row.appendChild(wrapper);
+        if (rowSpan) {
             row.rowSpan = rowSpan;
         }
         return row;
     },
+    getButton: function (className) {
+        const btn = document.createElement('i');
+        btn.setAttribute('class', className);
+        return btn;
+    },
+    allowEditing: function (event) {
+        const input = event.target;
+        input.removeAttribute('readonly');
+    },
+    save: function (event) {
+
+    },
+    cancel: function (event) {
+
+    }
 };
