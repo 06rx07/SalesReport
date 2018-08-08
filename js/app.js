@@ -87,6 +87,7 @@ const action = {
         }
     },
     resetLineCharts: function(event){
-        getTable.getTableBySelect(action.getValue(regionSelect), action.getValue(productSelect));
+        const salesData = processData.getDataBySelect(action.getValue(regionSelect), action.getValue(productSelect));
+        getTable.displayLineChart(salesData);
     }
 };

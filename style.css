@@ -32,28 +32,28 @@ tr .input-wrapper:focus-within {
     border: 2px solid #4D90FE;
     padding: 0;
 }
-.input-wrapper > * {
-    display: inline;
+.input-wrapper {
+    display: flex;
 }
 .input-wrapper .input-edit,
 .input-wrapper .input-confirm,
 .input-wrapper .input-cancel {
     display: none;
 }
-.input-wrapper:hover .input-edit {
+.input-wrapper.non-edit:hover .input-edit {
     color: #808080;
     display: inline;
 }
-.input-wrapper:focus-within .input-confirm {
+.input-wrapper.show-edit .input-confirm {
     color: #3cb44b;
     display: inline;
     margin-right: 10px;
 }
-.input-wrapper:focus-within .input-cancel {
+.input-wrapper.show-edit .input-cancel {
     color: #ffe119;
     display: inline;
 }
-.input-wrapper:focus-within .input-edit {
+.input-wrapper.show-edit .input-edit {
     display: none;
 }
 .charts {

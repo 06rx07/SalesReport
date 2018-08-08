@@ -117,7 +117,7 @@ const getTable = {
     getRowElement: function (text, rowSpan, isInput, colIndex) {
         const row = document.createElement('td');
         const wrapper = document.createElement('div');
-        wrapper.setAttribute('class', 'input-wrapper');
+        wrapper.setAttribute('class', 'input-wrapper non-edit');
         if (isInput) {
             const input = document.createElement('input');
             input.value = text;
@@ -155,10 +155,11 @@ const getTable = {
         const input = event.target;
         input.removeAttribute('readonly');
         tempInput = input.value;
+        input.parentNode.className = 'input-wrapper show-edit';
     },
     keydownInput: function (event) {
         if (event.key === 'Enter') {
-            getTable.save(event.path, event.target);
+            getTable.save(Array.from(path).filter(ele => ele.localName === 'tr')[0], event.target);
             event.target.blur();
         } else if (event.key === 'Escape') {
             getTable.revert(event.target);
@@ -166,22 +167,25 @@ const getTable = {
         }
     },
     confirm: function (event) {
-        console.log(event);
-        getTable.save(event.path);
+        const tr = Array.from(event.path).filter(ele => ele.localName === 'tr')[0];
+        const input = Array.from(event.target.parentNode.childNodes).filter(ele => ele.localName === 'input')[0];
+        getTable.save(tr, input);
     },
     cancel: function (event) {
-        console.log(event);
-        getTable.cancel(Array.from(path).filter(ele => ele.localName === 'input')[0]);
+        if (event.target) {
+            const input = Array.from(event.target.parentNode.childNodes).filter(ele => ele.localName === 'input')[0];
+            getTable.revert(input);
+        }
     },
-    save: function (path) {
-        const sales = Array.from(path).filter(ele => ele.localName === 'tr')[0]
-            .attributes.sales.value;
+    save: function (tr, input) {
+        const sales = tr.attributes.sales.value;
         const product = sales.split(' ')[0];
         const region = sales.split(' ')[1];
-        const target = Array.from(path).filter(ele => ele.localName === 'input')[0];
-        processData.saveByPosition(region, product, target.attributes.index.value, target.value);
+        processData.saveByPosition(region, product, input.attributes.index.value, input.value);
+        input.parentNode.className = 'input-wrapper';
     },
-    revert: function (target) {
-        target.value = tempInput;
+    revert: function (input) {
+        input.value = tempInput;
+        input.parentNode.className = 'input-wrapper non-edit';
     }
 };
