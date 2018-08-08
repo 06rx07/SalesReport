@@ -1,9 +1,25 @@
 const tableWrapper = document.querySelector('#table-wrapper');
 let tempInput = null;
+let tempSourceData = null;
 
 const processData = {
+    load: function () {
+        const jsonData = localStorage.getItem('sourceData');
+        tempSourceData = (jsonData) ? JSON.parse(jsonData) : sourceData;
+    },
     getDataBySelect: function (region, product) {
-        return sourceData.filter((data) => region.indexOf(data.region) > -1 && product.indexOf(data.product) > -1);
+        if (!tempSourceData) { this.load(); }
+        return tempSourceData.filter((data) => region.indexOf(data.region) > -1 && product.indexOf(data.product) > -1);
+    },
+    saveByPosition: function (region, product, index, value) {
+        const rowIndex = tempSourceData.findIndex(data => data.region === region && data.product === product);
+        if (rowIndex > -1) {
+            tempSourceData[rowIndex].sale[index] = value;
+            this.save(tempSourceData);
+        }
+    },
+    save: function (data) {
+        localStorage.setItem('sourceData', JSON.stringify(data));
     }
 };
 
@@ -94,11 +110,11 @@ const getTable = {
         const appendKey = (spanKey === 'product') ? 'region' : 'product';
         row.appendChild(this.getRowElement(rowData[appendKey]));
         for (let i = 0; i < rowData['sale'].length; i++) {
-            row.appendChild(this.getRowElement(rowData['sale'][i], null, true));
+            row.appendChild(this.getRowElement(rowData['sale'][i], null, true, i));
         }
         return row;
     },
-    getRowElement: function (text, rowSpan, isInput) {
+    getRowElement: function (text, rowSpan, isInput, colIndex) {
         const row = document.createElement('td');
         const wrapper = document.createElement('div');
         wrapper.setAttribute('class', 'input-wrapper');
@@ -107,14 +123,16 @@ const getTable = {
             input.value = text;
             input.type = 'number';
             input.readOnly = 'true';
+            input.setAttribute('index', colIndex);
             input.addEventListener('click', getTable.allowEditing);
+            input.addEventListener('keydown', getTable.keydownInput);
             wrapper.appendChild(input);
             wrapper.appendChild(getTable.getButton('far fa-edit input-edit'));
-            
+
             const saveBtn = getTable.getButton('fas fa-check input-confirm');
-            saveBtn.addEventListener('click', getTable.save);
+            saveBtn.addEventListener('click', getTable.confirm);
             wrapper.appendChild(saveBtn);
-            
+
             const cancelBtn = getTable.getButton('fas fa-times input-cancel');
             cancelBtn.addEventListener('click', getTable.cancel);
             wrapper.appendChild(cancelBtn);
@@ -136,11 +154,34 @@ const getTable = {
     allowEditing: function (event) {
         const input = event.target;
         input.removeAttribute('readonly');
+        tempInput = input.value;
     },
-    save: function (event) {
-
+    keydownInput: function (event) {
+        if (event.key === 'Enter') {
+            getTable.save(event.path, event.target);
+            event.target.blur();
+        } else if (event.key === 'Escape') {
+            getTable.revert(event.target);
+            event.target.blur();
+        }
+    },
+    confirm: function (event) {
+        console.log(event);
+        getTable.save(event.path);
     },
     cancel: function (event) {
-
+        console.log(event);
+        getTable.cancel(Array.from(path).filter(ele => ele.localName === 'input')[0]);
+    },
+    save: function (path) {
+        const sales = Array.from(path).filter(ele => ele.localName === 'tr')[0]
+            .attributes.sales.value;
+        const product = sales.split(' ')[0];
+        const region = sales.split(' ')[1];
+        const target = Array.from(path).filter(ele => ele.localName === 'input')[0];
+        processData.saveByPosition(region, product, target.attributes.index.value, target.value);
+    },
+    revert: function (target) {
+        target.value = tempInput;
     }
 };

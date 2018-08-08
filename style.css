@@ -21,13 +21,14 @@ tr input {
     margin: 0;
     width: 50px;
     border: none;
-    padding: 3px;
+    padding: 0;
     outline: none;
 }
 tr .input-wrapper {
     padding: 2px;
 }
-tr .input-wrapper:hover{
+tr .input-wrapper:hover,
+tr .input-wrapper:focus-within {
     border: 2px solid #4D90FE;
     padding: 0;
 }
@@ -46,6 +47,7 @@ tr .input-wrapper:hover{
 .input-wrapper:focus-within .input-confirm {
     color: #3cb44b;
     display: inline;
+    margin-right: 10px;
 }
 .input-wrapper:focus-within .input-cancel {
     color: #ffe119;
