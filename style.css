@@ -32,6 +32,9 @@ tr .input-wrapper:focus-within {
     border: 2px solid #4D90FE;
     padding: 0;
 }
+tr .input-wrapper.is-error:focus-within {
+    border: 2px solid #e6194b;
+}
 .input-wrapper {
     display: flex;
 }

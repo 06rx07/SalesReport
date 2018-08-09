@@ -159,7 +159,7 @@ const getTable = {
     },
     keydownInput: function (event) {
         if (event.key === 'Enter') {
-            getTable.save(Array.from(path).filter(ele => ele.localName === 'tr')[0], event.target);
+            getTable.save(Array.from(event.path).filter(ele => ele.localName === 'tr')[0], event.target);
             event.target.blur();
         } else if (event.key === 'Escape') {
             getTable.revert(event.target);
@@ -178,11 +178,17 @@ const getTable = {
         }
     },
     save: function (tr, input) {
-        const sales = tr.attributes.sales.value;
-        const product = sales.split(' ')[0];
-        const region = sales.split(' ')[1];
-        processData.saveByPosition(region, product, input.attributes.index.value, input.value);
-        input.parentNode.className = 'input-wrapper';
+        const value = parseInt(input.value);
+        if (!isNaN(value) && value >= 0) {
+            const sales = tr.attributes.sales.value;
+            const product = sales.split(' ')[0];
+            const region = sales.split(' ')[1];
+            processData.saveByPosition(region, product, input.attributes.index.value, input.value);
+            input.parentNode.className = 'input-wrapper';
+        } else {
+            input.parentNode.className = 'input-wrapper is-error';
+            input.focus();
+        }
     },
     revert: function (input) {
         input.value = tempInput;
