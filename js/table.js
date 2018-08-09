@@ -136,6 +136,8 @@ const getTable = {
             const cancelBtn = getTable.getButton('fas fa-times input-cancel');
             cancelBtn.addEventListener('click', getTable.cancel);
             wrapper.appendChild(cancelBtn);
+
+            wrapper.addEventListener('focusout', getTable.resetWrapper);
         } else {
             const rowText = document.createTextNode(text);
             wrapper.appendChild(rowText);
@@ -154,7 +156,9 @@ const getTable = {
     allowEditing: function (event) {
         const input = event.target;
         input.removeAttribute('readonly');
-        tempInput = input.value;
+        if (!isNaN(parseInt(input.value)) && input.value >= 0) {
+            tempInput = input.value;
+        }
         input.parentNode.className = 'input-wrapper show-edit';
     },
     keydownInput: function (event) {
@@ -183,7 +187,8 @@ const getTable = {
             const sales = tr.attributes.sales.value;
             const product = sales.split(' ')[0];
             const region = sales.split(' ')[1];
-            processData.saveByPosition(region, product, input.attributes.index.value, input.value);
+            processData.saveByPosition(region, product, input.attributes.index.value, value);
+            tempInput = value;
             input.parentNode.className = 'input-wrapper';
         } else {
             input.parentNode.className = 'input-wrapper is-error';
@@ -193,5 +198,9 @@ const getTable = {
     revert: function (input) {
         input.value = tempInput;
         input.parentNode.className = 'input-wrapper non-edit';
+    },
+    resetWrapper: function (event) {
+        const input = Array.from(event.path).filter(ele => ele.localName === 'input')[0];
+        getTable.revert(input);
     }
 };
