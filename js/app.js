@@ -107,6 +107,6 @@ const action = {
     }
 };
 
-window.addEventListener('hashChange', function (event) {
+window.addEventListener('popstate', function (event) {
     action.loadState(route.load());
 });
