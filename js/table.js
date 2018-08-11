@@ -82,7 +82,7 @@ const getTable = {
                 resultEle.data.push(data);
             }
         }
-        result.push(resultEle);
+        if (Object.keys(resultEle).length) { result.push(resultEle); }
         return result;
     },
     appendHeaders: function (firstCol) {

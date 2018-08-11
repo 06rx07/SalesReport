@@ -4,7 +4,8 @@ const regionAll = document.querySelector('input[name="region-all"]');
 const productAll = document.querySelector('input[name="product-all"]');
 
 const init = function () {
-    getTable.getTableBySelect(action.getValue(regionSelect), action.getValue(productSelect));
+    action.loadState(route.load());
+
     for (let node of regionSelect) {
         node.addEventListener('change', action.selectRegion);
     }
@@ -18,10 +19,20 @@ const init = function () {
 };
 
 const action = {
-    getValue: function (parentNodes) {
+    getValue: function (parentNodes, getAll) {
         return Array.from(parentNodes)
-            .filter(node => node.checked)
+            .filter(node => node.checked || getAll)
             .map(checkbox => checkbox.value);
+    },
+    loadState: function (result) {
+        action.setChecked(regionSelect, result['region']);
+        action.setChecked(productSelect, result['product']);
+        getTable.getTableBySelect(result['region'], result['product']);
+    },
+    setChecked: function (parentNodes, values) {
+        for (const node of Array.from(parentNodes)) {
+            node.checked = values.indexOf(node.value) > -1;
+        }
     },
     keepChecked: function (target) {
         target.checked = true;
@@ -31,7 +42,9 @@ const action = {
         if (regionValue.length) {
             (regionValue.length < 3) ? action.checkSelectAllRegion(false) :
                 action.checkSelectAllRegion(true);
-            getTable.getTableBySelect(regionValue, action.getValue(productSelect));
+            const productValue = action.getValue(productSelect);
+            getTable.getTableBySelect(regionValue, productValue);
+            route.save({ region: regionValue, product: productValue });
         } else if (event) {
             action.keepChecked(event.target);
         }
@@ -41,7 +54,9 @@ const action = {
         if (productValue.length) {
             (productValue.length < 3) ? action.checkSelectAllProduct(false) :
                 action.checkSelectAllProduct(true);
-            getTable.getTableBySelect(action.getValue(regionSelect), productValue);
+            const regionValue = action.getValue(regionSelect);
+            getTable.getTableBySelect(regionValue, productValue);
+            route.save({ region: regionValue, product: productValue });
         } else if (event) {
             action.keepChecked(event.target);
         }
@@ -86,8 +101,12 @@ const action = {
             }
         }
     },
-    resetLineCharts: function(event){
+    resetLineCharts: function (event) {
         const salesData = processData.getDataBySelect(action.getValue(regionSelect), action.getValue(productSelect));
         getTable.displayLineChart(salesData);
     }
 };
+
+window.addEventListener('hashChange', function (event) {
+    action.loadState(route.load());
+});
